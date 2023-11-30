@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Speech Detection</title>
+  <link rel="icon" href="https://fav.farm/🔥" />
+</head>
+<body>
+  <h1>Just speak, and use the following commands:</h1>
+  <ul>
+  <li>Add two numbers by saying, 'number 1 plus number 2'</li>
+  <li>Subtract two numbers by saying, 'number 1 minus number 2'</li>
+  <li>Multiply two numbers by saying, 'number 1 times number 2'</li>
+  <li>Divide two numbers by saying, 'number 1 divided by number 2'</li>
+  <li>Find modulus of two numbers by saying, 'number 1 percent number 2'</li>
+  <li>Try "open YouTube", "open x/twitter", "open instagram", "chaiaurcode", "DSA", "backend", "play my favourite song"</li>
+  </ul>
+  <div class="words" contenteditable>
+  </div>
+
+<script>
+  window.SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+  const recognition = new SpeechRecognition();
+  recognition.interimResults = true;
+
+  let p = document.createElement('p');
+  const words = document.querySelector('.words');
+  words.appendChild(p);
+
+  function add(num1, num2){
+    return num1 + num2;
+  }
+  function subtract(num1, num2){
+    return num1 - num2;
+  }
+  function divide(num1, num2){
+    return num1/num2;
+  }
+  function multiply(num1, num2){
+    return num1*num2;
+  }
+  function modulo(num1, num2){
+    return num1%num2;
+  }
+
+  let num1 = 0;
+  let num2 = 0;
+
+  recognition.addEventListener('result', e => {
+    const transcript = Array.from(e.results)
+      .map(result => result[0].transcript).join('');
+    p.textContent = transcript;
+    
+    if (e.results[0].isFinal) {
+      const match = transcript.match(/(\d+)\s*[+-/x%]\s*(\d+)/);
+      
+      if (match) {
+        const operand1 = parseInt(match[1]);
+        const operand2 = parseInt(match[2]);
+
+        if (transcript.includes('+')) {
+          p.textContent = `=> ${add(operand1, operand2)}`;
+        } else if (transcript.includes('-')) {
+          p.textContent = `=> ${subtract(operand1, operand2)}`; 
+        } else if(transcript.includes('/')){
+          p.textContent =  `=> ${divide(operand1, operand2)}`;
+        }
+        else if(transcript.includes('x')){
+          p.textContent =  `=> ${multiply(operand1, operand2)}`;
+        }
+        else if(transcript.includes('%')){
+          p.textContent =  `=> ${modulo(operand1, operand2)}`;
+        }
+      }
+      if(transcript.includes('open YouTube')){
+        window.open("https://www.youtube.com", "_blank");
+      }
+      if(transcript.includes('open Instagram')){
+        window.open("https://www.instagram.com", "_blank");
+      }
+      if(transcript.includes('open x') || transcript.includes('open Twitter')){
+        window.open("https://www.twitter.com", "_blank"); 
+      }
+      if(transcript.includes('chai aur code')){
+        window.open("https://www.youtube.com/@chaiaurcode");
+      }
+      if(transcript.includes('backend')){
+        window.open("https://www.youtube.com/watch?v=EH3vGeqeIAo&list=PLu71SKxNbfoBGh_8p_NS-ZAh6v7HhYqHW", "_blank");
+      }
+      if(transcript.includes('DSA')){
+        window.open("https://takeuforward.org/strivers-a2z-dsa-course/strivers-a2z-dsa-course-sheet-2/")
+      }
+      if(transcript.includes('play my favourite song')){
+        window.open("https://www.youtube.com/watch?v=-8rArp_S844", `${alert("Click OK to play Khand Mishri")}`)
+        
+
+      }
+
+      p = document.createElement('p');
+      words.appendChild(p);
+    }
+    console.log(transcript);
+  });
+
+  recognition.addEventListener('end', recognition.start);
+
+  recognition.start();
+</script>
+
+<style>
+  html {
+    font-size: 10px;
+  }
+  li{
+    font-weight: 600;
+    max-width: 850px;
+    color: whitesmoke;
+    text-shadow: 0.4px 0.7px black;
+  }
+  body {
+    background: rgb(0, 255, 136);
+    font-family: Arial, Helvetica, sans-serif;
+    font-weight: 200;
+    font-size: 20px;
+  }
+
+  .words {
+    max-width: 500px;
+    margin: 50px auto;
+    background: white;
+    border-radius: 5px;
+    box-shadow: 10px 10px 0 rgba(0,0,0,0.1);
+    padding: 1rem 2rem 1rem 5rem;
+    background: -webkit-gradient(linear, 0 0, 0 100%, from(#d9eaf3), color-stop(4%, #fff)) 0 4px;
+    background-size: 100% 3rem;
+    position: relative;
+    line-height: 3rem;
+  }
+
+  p {
+    margin: 0 0 3rem;
+  }
+
+  .words:before {
+    content: '';
+    position: absolute;
+    width: 4px;
+    top: 0;
+    left: 30px;
+    bottom: 0;
+    border: 1px solid;
+    border-color: transparent #efe4e4;
+  }
+</style>
+
+</body>
+</html>
